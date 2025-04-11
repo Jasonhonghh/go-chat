@@ -2,8 +2,8 @@ package go_chat_server
 
 import (
 	"github.com/sirupsen/logrus"
-	"gochat/config"
-	"gochat/http_server"
+	"gochat/internal/config"
+	"gochat/internal/http_server"
 )
 
 func main() {
