@@ -11,8 +11,7 @@ func init() {
 	Config = *viper.New()
 	Config.SetConfigName("config")
 	Config.SetConfigType("toml")
-	Config.AddConfigPath("../")
-	Config.AddConfigPath(".")
+	Config.AddConfigPath("../../configs")
 	err := Config.ReadInConfig()
 	if err != nil {
 		logrus.Fatalf(err.Error()) //读取配置文件出错，直接日志报错

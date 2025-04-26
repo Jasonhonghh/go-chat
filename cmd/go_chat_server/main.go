@@ -1,4 +1,4 @@
-package go_chat_server
+package main
 
 import (
 	"github.com/sirupsen/logrus"

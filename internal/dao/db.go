@@ -2,14 +2,15 @@ package dao
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"gochat/internal/config"
 	"gochat/internal/model"
+
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 func init() {
 
@@ -22,11 +23,11 @@ func init() {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, database)
 	var err error
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		logrus.Fatalf(err.Error())
 	}
-	err = db.AutoMigrate(&model.ContactApply{}, &model.Message{}, &model.GroupInfo{}, &model.GroupInfo{}, &model.UserInfo{}, &model.Session{}, &model.UserContact{})
+	err = DB.AutoMigrate(&model.ContactApply{}, &model.Message{}, &model.GroupInfo{}, &model.GroupInfo{}, &model.UserInfo{}, &model.Session{}, &model.UserContact{})
 	if err != nil {
 		logrus.Fatalf(err.Error())
 	}
