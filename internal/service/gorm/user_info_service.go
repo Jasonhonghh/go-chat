@@ -7,7 +7,7 @@ import (
 	"gochat/internal/dto/response"
 	"gochat/internal/model"
 	"gochat/internal/service/redis"
-	user_status_enums "gochat/pkg/enum/user_info"
+	"gochat/pkg/enum/user_info/user_status_enums"
 	"gochat/pkg/util/random"
 	"time"
 
@@ -20,12 +20,19 @@ var UserInfoService = new(userInfoService)
 
 // 判断电话号码是否被注册过
 func (u *userInfoService) checkTelephoneExist(telephone string) bool {
-	return false
+	var user model.UserInfo
+	res := dao.DB.First(&user, "telephone = ?", telephone)
+	return !(res.Error != nil || res.RowsAffected == 0)
 }
 
 // 判断用户是不是管理员
 func (u *userInfoService) checkUserIsAdmin(telephone string) int8 {
-	return 0
+	var user model.UserInfo
+	res := dao.DB.First(&user, "telephone =?", telephone)
+	if res.Error != nil || res.RowsAffected == 0 {
+		logrus.Errorf("查询用户信息失败")
+	}
+	return user.IsAdmin
 }
 
 // 注册功能
@@ -60,6 +67,8 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 	if res.Error != nil {
 		logrus.Errorf("写入到数据库失败")
 	}
+
+	//返回注册信息
 	registerRsp := &response.RegisterResponse{
 		Uuid:      newUser.Uuid,
 		Nickname:  newUser.Nickname,
@@ -73,6 +82,37 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 		Status:    newUser.Status,
 	}
 	year, month, date := newUser.CreatedAt.Date()
-	registerRsp.CreatedAt = fmt.Sprintf("%s.%s.%s", year, month, date)
+	registerRsp.CreatedAt = fmt.Sprintf("%d.%d.%d", year, month, date)
 	return "注册成功", registerRsp, 0
+}
+
+func (u *userInfoService) Login(request request.LoginRequest) (string, *response.LoginResponse, int) {
+	//查看用户是否存在
+	var user model.UserInfo
+	res := dao.DB.First(&user, "telephone =?", request.Telephone)
+	if res.Error != nil || res.RowsAffected == 0 {
+		logrus.Errorf("用户不存在")
+		return "用户不存在", nil, -1
+	}
+	//校验密码
+	if user.Password != request.Password {
+		logrus.Errorf("密码不正确")
+		return "密码不正确", nil, -1
+	}
+	//返回登录信息
+	loginRsp := &response.LoginResponse{
+		Uuid:      user.Uuid,
+		Nickname:  user.Nickname,
+		Telephone: user.Telephone,
+		Avatar:    user.Avatar,
+		Email:     user.Email,
+		Gender:    user.Gender,
+		Birthday:  user.Birthday,
+		Signature: user.Signature,
+		IsAdmin:   user.IsAdmin,
+		Status:    user.Status,
+	}
+	year, month, date := user.CreatedAt.Date()
+	loginRsp.CreatedAt = fmt.Sprintf("%d.%d.%d", year, month, date)
+	return "登录成功", loginRsp, 0
 }

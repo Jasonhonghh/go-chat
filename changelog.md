@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 ---
 ## [Unreleased] - 2025-04-24
 ### Added
-- 添加注册接口。`/register`:只注册了api，没有编写service逻辑，需要sms校验。
+- 添加注册接口。`/register`:校验验证码，检查用户是否存在，注册用户。
+- 添加密码登录接口。`/login`:检查用户是否存在，校验密码。
 
 ---
 

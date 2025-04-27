@@ -18,3 +18,13 @@ func Register(c *gin.Context) {
 	message, data, code := gorm.UserInfoService.Register(registerReq)
 	JsonBack(c, message, code, data)
 }
+
+func Login(c *gin.Context) {
+	var loginReq request.LoginRequest
+	if err := c.BindJSON(&loginReq); err == nil {
+		logrus.Error(err)
+	}
+	logrus.Info(fmt.Sprintf("loginReq: %+v", loginReq))
+	message, data, code := gorm.UserInfoService.Login(loginReq)
+	JsonBack(c, message, code, data)
+}
