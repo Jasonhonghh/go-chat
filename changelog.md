@@ -17,6 +17,17 @@ All notable changes to this project will be documented in this file.
 ### Added
 - 添加注册接口。`/register`:校验验证码，检查用户是否存在，注册用户。
 - 添加密码登录接口。`/login`:检查用户是否存在，校验密码。
+- 添加用户信息获取接口。`/user/info`:获取用户信息。
+
+- 添加群组创建接口。`/group/create`:创建群组。
+- 添加群组信息获取接口。`/group/info`:获取群组信息。
+- 添加群组成员添加接口。`/group/add`:添加群组成员。
+
+- 添加好友申请接口。`/friend/add`:发送好友申请。
+- 添加好友申请处理接口。`/friend/handle`:处理好友申请。
+
+- 添加消息发送接口。`/message/send`:发送消息。
+- 添加消息接收接口。`/message/receive`:接收消息。
 
 ---
 

@@ -116,3 +116,30 @@ func (u *userInfoService) Login(request request.LoginRequest) (string, *response
 	loginRsp.CreatedAt = fmt.Sprintf("%d.%d.%d", year, month, date)
 	return "登录成功", loginRsp, 0
 }
+
+func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (string, *response.GetUserInfoResponse, int) {
+	//查看用户是否存在
+	var user model.UserInfo
+	res := dao.DB.First(&user, "uuid =?", request.Uuid)
+	if res.Error != nil || res.RowsAffected == 0 {
+		logrus.Errorf("用户不存在")
+		return "用户不存在", nil, -1
+	}
+
+	//返回用户信息
+	getUserInfoRsp := &response.GetUserInfoResponse{
+		Uuid:      user.Uuid,
+		Nickname:  user.Nickname,
+		Telephone: user.Telephone,
+		Avatar:    user.Avatar,
+		Email:     user.Email,
+		Gender:    user.Gender,
+		Birthday:  user.Birthday,
+		Signature: user.Signature,
+		IsAdmin:   user.IsAdmin,
+		Status:    user.Status,
+	}
+	year, month, date := user.CreatedAt.Date()
+	getUserInfoRsp.CreatedAt = fmt.Sprintf("%d.%d.%d", year, month, date)
+	return "获取用户信息成功", getUserInfoRsp, 0
+}
