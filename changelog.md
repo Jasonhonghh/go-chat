@@ -23,11 +23,18 @@ All notable changes to this project will be documented in this file.
 - 添加群组信息获取接口。`/group/info`:获取群组信息。
 - 添加群组成员添加接口。`/group/add`:添加群组成员。
 
-- 添加好友申请接口。`/friend/add`:发送好友申请。
-- 添加好友申请处理接口。`/friend/handle`:处理好友申请。
+- 添加联系人添加接口。 `/contacts/apply`:添加联系人。
+- 添加联系人信息获取接口。`/contacts/info`:获取联系人信息。
+- 处理联系人添加请求。`/contacts/pass`:通过联系人添加请求。
+- 处理联系人添加请求。`/contacts/reject`:拒绝联系人添加请求。
 
-- 添加消息发送接口。`/message/send`:发送消息。
-- 添加消息接收接口。`/message/receive`:接收消息。
+- 添加会话创建接口。`/session/create`:创建会话。
+- 添加获取用户会话列表。`/session/list`:获取会话列表。
+- 添加会话信息获取接口。`/session/info`:获取会话信息。
+
+- 获取消息列表接口。`/message/getMessage`:获取消息列表。
+
+- 添加发送消息接口。`/wss`:通过WebSocket发送消息。
 
 ---
 
