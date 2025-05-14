@@ -10,17 +10,24 @@ import {
 } from 'react-icons/fa';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
+import AIAssistantButton from './AIAssistantButton';
+import { chatWithAI, summarizeMessages, uploadFile } from '../../lib/api';
+
+import { Theme } from '@/hooks/useTheme';
 
 interface MessageInputProps {
-  onSendMessage: (content: string, type?: string, fileData?: any) => void;
+  onSendMessage: (content: string, type?: 'text' | 'image' | 'file' | 'markdown' | 'ai', fileData?: any) => void;
+  chatId?: string | null;
+  theme?: Theme;
 }
 
-export default function MessageInput({ onSendMessage }: MessageInputProps) {
+export default function MessageInput({ onSendMessage, chatId, theme = 'dark' }: MessageInputProps) {
   const [message, setMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isMarkdown, setIsMarkdown] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,40 +50,116 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
     setShowEmojiPicker(false);
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, type: 'file' | 'image') => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>, type: 'file' | 'image') => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !chatId) return;
 
-    // 对于图片，我们创建一个预览URL
+    // 对于图片，我们创建一个预览URL并上传
     if (type === 'image') {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          onSendMessage(
-            event.target.result as string,
-            'image',
-            { name: file.name, size: file.size, type: file.type }
-          );
-        }
-      };
-      reader.readAsDataURL(file);
+      try {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          if (event.target?.result) {
+            // 显示预览
+            const previewUrl = event.target.result as string;
+            
+            // 上传文件并获取URL
+            const response = await uploadFile(file, chatId);
+            const fileUrl = response.data.url;
+            
+            // 发送消息
+            onSendMessage(
+              previewUrl,
+              'image',
+              { 
+                name: file.name, 
+                size: file.size, 
+                type: file.type,
+                url: fileUrl 
+              }
+            );
+          }
+        };
+        reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('上传图片失败:', error);
+      }
     } else {
-      // 对于文件，我们只传递文件信息
-      onSendMessage(
-        `文件: ${file.name}`,
-        'file',
-        { name: file.name, size: file.size, type: file.type }
-      );
+      // 对于文件，我们上传并获取URL
+      try {
+        const response = await uploadFile(file, chatId);
+        const fileUrl = response.data.url;
+        
+        onSendMessage(
+          `文件: ${file.name}`,
+          'file',
+          { 
+            name: file.name, 
+            size: file.size, 
+            type: file.type,
+            url: fileUrl 
+          }
+        );
+      } catch (error) {
+        console.error('上传文件失败:', error);
+      }
     }
 
     // 清除input的值，以便同一文件可以再次选择
     e.target.value = '';
   };
 
+  // AI助手交互
+  const handleAIAssistant = async () => {
+    if (!message.trim() || !chatId) return;
+    
+    try {
+      setAiLoading(true);
+      // 先发送用户消息
+      onSendMessage(message, 'text');
+      
+      // 请求AI回复
+      const response = await chatWithAI(message, chatId);
+      
+      // 发送AI回复
+      onSendMessage(response.data.content, 'ai', { isAI: true });
+    } catch (error) {
+      console.error('AI助手回复失败:', error);
+    } finally {
+      setAiLoading(false);
+      setMessage('');
+    }
+  };
+
+  // AI总结聊天记录
+  const handleAISummarize = async () => {
+    if (!chatId) return;
+    
+    try {
+      setAiLoading(true);
+      const response = await summarizeMessages(chatId);
+      
+      // 发送AI总结
+      onSendMessage(response.data.summary, 'ai', { 
+        isAI: true, 
+        summary: true 
+      });
+    } catch (error) {
+      console.error('总结聊天记录失败:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
         <div className="flex items-center space-x-1 px-3">
+          <AIAssistantButton 
+            onAIAssistantClick={handleAIAssistant}
+            onAISummarizeClick={handleAISummarize}
+          />
+          
           <button 
             type="button"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -134,9 +217,9 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
         
         <button 
           type="submit"
-          disabled={!message.trim()}
+          disabled={!message.trim() || aiLoading}
           className={`px-4 py-3 ${
-            message.trim() ? 'text-primary hover:bg-blue-50' : 'text-gray-400'
+            message.trim() && !aiLoading ? 'text-primary hover:bg-blue-50' : 'text-gray-400'
           }`}
         >
           <FaPaperPlane className="w-5 h-5" />
@@ -150,4 +233,4 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
       )}
     </form>
   );
-} 
+}

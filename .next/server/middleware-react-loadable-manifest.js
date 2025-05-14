@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"app/layout.tsx -> @/components/dev/DevTools":{"id":3898,"files":["static/chunks/898.6fe04c322d0298ed.js"]}}';

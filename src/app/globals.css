@@ -6,6 +6,23 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 248, 250, 252;
   --background-end-rgb: 241, 245, 249;
+  
+  /* Discord-like variables */
+  --discord-dark-primary: #36393f;
+  --discord-dark-secondary: #2f3136;
+  --discord-dark-tertiary: #202225;
+  --discord-light-primary: #ffffff;
+  --discord-light-secondary: #f2f3f5;
+  --discord-light-tertiary: #e3e5e8;
+  --discord-accent: #5865f2;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 body {
@@ -15,13 +32,16 @@ body {
     rgb(var(--background-start-rgb)),
     rgb(var(--background-end-rgb))
   );
-  height: 100vh;
-  overflow: hidden;
+}
+
+#__next {
+  height: 100%;
+  width: 100%;
 }
 
 @layer utilities {
   .scrollbar-thin::-webkit-scrollbar {
-    width: 5px;
+    width: 4px;
   }
   
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -30,10 +50,36 @@ body {
   
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: rgba(156, 163, 175, 0.5);
-    border-radius: 20px;
+    border-radius: 10px;
   }
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Discord-style scrollbar */
+  .scrollbar-discord::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .scrollbar-discord::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  
+  .scrollbar-discord::-webkit-scrollbar-thumb {
+    background-color: rgba(24, 25, 28, 0.6);
+    min-height: 40px;
+    border-radius: 4px;
+  }
+  
+  .scrollbar-discord::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 4px;
+  }
+  
+  .scrollbar-discord::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+    border-radius: 4px;
   }
 } 

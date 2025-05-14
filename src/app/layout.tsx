@@ -1,13 +1,23 @@
+'use client';
+
+import React, { Suspense, lazy } from 'react';
 import './globals.css';
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@/hooks/useTheme';
+
+// 动态导入 DevTools 组件
+const DevTools = lazy(() => import('@/components/dev/DevTools'));
+
+// DevTools包装器，处理客户端组件的渲染
+const DevToolsWrapper = () => {
+  return (
+    <Suspense fallback={<div />}>
+      <DevTools />
+    </Suspense>
+  );
+};
 
 const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'Go-Chat | 实时聊天应用',
-  description: '一个前后端分离的高性能、轻量级聊天系统，融合微信式交互与可扩展架构设计。',
-};
 
 export default function RootLayout({
   children,
@@ -16,8 +26,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
+      <head>
+        <title>Go-Chat</title>
+        <meta name="description" content="A modern chat application" />
+      </head>
       <body className={inter.className}>
-        {children}
+        <ThemeProvider>
+          {children}
+          {process.env.NODE_ENV !== 'production' && typeof window !== 'undefined' && (
+            <div className="dev-tools-container">
+              {/* 开发工具组件 */}
+              <DevToolsWrapper />
+            </div>
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );

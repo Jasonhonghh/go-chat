@@ -1,27 +1,11 @@
 'use client';
 
 import { create } from 'zustand';
+import { Message as TypedMessage, Chat as TypedChat } from '../types';
 
-interface Message {
-  id: string;
-  senderId: string;
-  content: string;
-  type: string;
-  fileData?: any;
-  timestamp: string;
-}
-
-interface Chat {
-  id: string;
-  name: string;
-  avatar: string;
-  lastMessage?: {
-    content: string;
-    timestamp: string;
-  };
-  unreadCount: number;
-  isGroup: boolean;
-}
+// Using the imported types
+type Message = TypedMessage;
+type Chat = TypedChat;
 
 interface ChatStore {
   // 聊天列表

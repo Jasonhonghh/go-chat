@@ -1,134 +1,120 @@
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import ReactMarkdown from 'react-markdown';
-
-interface Message {
-  id: string;
-  senderId: string;
-  content: string;
-  type: string;
-  fileData?: any;
-  timestamp: string;
-}
+import { RiRobot2Line } from 'react-icons/ri';
+import { Message } from '../../types';
 
 interface MessageListProps {
   messages: Message[];
   currentUserId: string;
+  highlighted?: boolean;
+  theme?: Theme;
 }
 
-export default function MessageList({ messages, currentUserId }: MessageListProps) {
-  const formatTime = (timestamp: string) => {
-    return format(new Date(timestamp), 'HH:mm', { locale: zhCN });
+import { Theme } from '@/hooks/useTheme';
+
+const MessageList: React.FC<MessageListProps> = ({ 
+  messages, 
+  currentUserId,
+  highlighted = false,
+  theme = 'dark'
+}) => {
+  const formatTimestamp = (timestamp: string) => {
+    return format(new Date(timestamp), 'HH:mm');
   };
 
   const renderMessageContent = (message: Message) => {
-    switch (message.type) {
-      case 'text':
-        return <p className="text-gray-800 break-words">{message.content}</p>;
+    if (message.type === 'image') {
+      return (
+        <img 
+          src={message.content} 
+          alt="发送的图片" 
+          className="max-w-xs rounded-lg shadow-sm"
+        />
+      );
+    } else if (message.type === 'file') {
+      const fileData = message.fileData;
+      const fileSize = fileData ? `${(fileData.size / 1024 / 1024).toFixed(2)} MB` : '';
+      const fileUrl = message.fileData?.url || '#';
       
-      case 'markdown':
-        return (
-          <div className="prose prose-sm max-w-none">
-            <ReactMarkdown>{message.content}</ReactMarkdown>
+      return (
+        <a 
+          href={fileUrl} 
+          download={fileData?.name}
+          className="flex items-center p-3 bg-gray-100 rounded-lg"
+        >
+          <svg className="w-8 h-8 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <div>
+            <div className="text-sm font-medium">{fileData?.name}</div>
+            <div className="text-xs text-gray-500">{fileSize}</div>
           </div>
-        );
-      
-      case 'image':
-        return (
-          <div className="relative w-48 h-48 rounded-lg overflow-hidden">
-            <Image
-              src={message.content}
-              alt="消息图片"
-              fill
-              className="object-cover"
-            />
-          </div>
-        );
-      
-      case 'file':
-        return (
-          <div className="flex items-center p-3 bg-gray-100 rounded-lg">
-            <div className="mr-3 text-blue-500">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">{message.fileData?.name || '文件'}</p>
-              <p className="text-xs text-gray-500">{message.fileData?.size ? `${(message.fileData.size / 1024).toFixed(2)} KB` : ''}</p>
-            </div>
-          </div>
-        );
-      
-      default:
-        return <p className="text-gray-800">{message.content}</p>;
-    }
-  };
-
-  const renderMessage = (message: Message, index: number) => {
-    const isCurrentUser = message.senderId === currentUserId;
-    
-    return (
-      <div 
-        key={message.id}
-        className={`flex mb-4 ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
-      >
-        {!isCurrentUser && (
-          <div className="flex-shrink-0 mr-3">
-            <div className="relative w-8 h-8 rounded-full overflow-hidden">
-              <Image
-                src="https://placehold.co/100x100/4f46e5/ffffff?text=用户"
-                alt="用户头像"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        )}
-        
-        <div className={`max-w-xs md:max-w-md ${isCurrentUser ? 'order-1' : 'order-2'}`}>
-          <div 
-            className={`px-4 py-2 rounded-lg ${
-              isCurrentUser 
-                ? 'bg-primary text-white rounded-br-none' 
-                : 'bg-gray-100 text-gray-800 rounded-bl-none'
-            }`}
-          >
-            {renderMessageContent(message)}
-          </div>
-          <span className={`text-xs text-gray-500 ${isCurrentUser ? 'text-right' : 'text-left'} block mt-1`}>
-            {formatTime(message.timestamp)}
-          </span>
+        </a>
+      );
+    } else if (message.type === 'markdown') {
+      return (
+        <div className="prose prose-sm max-w-none">
+          <ReactMarkdown>{message.content}</ReactMarkdown>
         </div>
-        
-        {isCurrentUser && (
-          <div className="flex-shrink-0 ml-3">
-            <div className="relative w-8 h-8 rounded-full overflow-hidden">
-              <Image
-                src="https://placehold.co/100x100/4f46e5/ffffff?text=我"
-                alt="我的头像"
-                fill
-                className="object-cover"
-              />
-            </div>
+      );
+    } else if (message.type === 'ai') {
+      return (
+        <div className="flex items-start">
+          <div className="mr-2 text-blue-500 mt-1">
+            <RiRobot2Line className="w-5 h-5" />
           </div>
-        )}
-      </div>
-    );
+          <div className="prose prose-sm max-w-none">
+            {message.summary ? (
+              <>
+                <div className="text-blue-500 font-medium mb-1">聊天记录总结</div>
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+              </>
+            ) : (
+              <ReactMarkdown>{message.content}</ReactMarkdown>
+            )}
+          </div>
+        </div>
+      );
+    } else {
+      return <div>{message.content}</div>;
+    }
   };
 
   return (
     <div className="space-y-4">
-      {messages.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-gray-500">没有消息，开始聊天吧！</p>
-        </div>
-      ) : (
-        messages.map((message, index) => renderMessage(message, index))
-      )}
+      {messages.map((message) => {
+        const isCurrentUser = message.senderId === currentUserId;
+        const isAI = message.isAI || message.type === 'ai';
+        
+        return (
+          <div 
+            key={message.id} 
+            className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
+          >
+            <div 
+              className={`max-w-xs sm:max-w-md p-3 rounded-lg ${
+                isAI 
+                  ? 'bg-blue-50 text-gray-800' 
+                  : isCurrentUser
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-200 text-gray-800'
+              }`}
+            >
+              {renderMessageContent(message)}
+              <div className={`text-xs mt-1 ${isCurrentUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                {formatTimestamp(message.timestamp)}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
-} 
+};
+
+export default MessageList; 
