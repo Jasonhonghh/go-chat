@@ -1,3 +1,6 @@
+[log]
+level = "debug" # debug, info, warn, error
+
 [mainConfig]
 appName = "your app name"
 host = "0.0.0.0"

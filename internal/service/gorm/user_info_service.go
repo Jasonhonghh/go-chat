@@ -5,13 +5,12 @@ import (
 	"gochat/internal/dao"
 	"gochat/internal/dto/request"
 	"gochat/internal/dto/response"
+	"gochat/internal/log"
 	"gochat/internal/model"
 	"gochat/internal/service/redis"
 	"gochat/pkg/enum/user_info/user_status_enums"
 	"gochat/pkg/util/random"
 	"time"
-
-	"github.com/sirupsen/logrus"
 )
 
 type userInfoService struct{}
@@ -30,7 +29,7 @@ func (u *userInfoService) checkUserIsAdmin(telephone string) int8 {
 	var user model.UserInfo
 	res := dao.DB.First(&user, "telephone =?", telephone)
 	if res.Error != nil || res.RowsAffected == 0 {
-		logrus.Errorf("查询用户信息失败")
+		log.LOG.Errorf("查询用户信息失败")
 	}
 	return user.IsAdmin
 }
@@ -41,16 +40,16 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 	key := "auth_code_" + request.Telephone
 	code, err := redis.GetKey(key)
 	if err != nil {
-		logrus.Error(err)
+		log.LOG.Error(err)
 	}
 	if code != request.SMSCode {
-		logrus.Errorf("验证码不正确，请重试")
+		log.LOG.Errorf("验证码不正确，请重试")
 	}
 
 	//校验电话号码，前端已经校验
 	//判断电话号码是否已经被注册过了
 	if u.checkTelephoneExist(request.Telephone) {
-		logrus.Errorf("手机号码已被注册")
+		log.LOG.Errorf("手机号码已被注册")
 	}
 
 	//未被注册，注册到数据库
@@ -65,7 +64,7 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 	newUser.Status = user_status_enums.Normal
 	res := dao.DB.Create(&newUser)
 	if res.Error != nil {
-		logrus.Errorf("写入到数据库失败")
+		log.LOG.Errorf("写入到数据库失败")
 	}
 
 	//返回注册信息
@@ -91,12 +90,12 @@ func (u *userInfoService) Login(request request.LoginRequest) (string, *response
 	var user model.UserInfo
 	res := dao.DB.First(&user, "telephone =?", request.Telephone)
 	if res.Error != nil || res.RowsAffected == 0 {
-		logrus.Errorf("用户不存在")
+		log.LOG.Errorf("用户不存在")
 		return "用户不存在", nil, -1
 	}
 	//校验密码
 	if user.Password != request.Password {
-		logrus.Errorf("密码不正确")
+		log.LOG.Errorf("密码不正确")
 		return "密码不正确", nil, -1
 	}
 	//返回登录信息
@@ -122,7 +121,7 @@ func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (strin
 	var user model.UserInfo
 	res := dao.DB.First(&user, "uuid =?", request.Uuid)
 	if res.Error != nil || res.RowsAffected == 0 {
-		logrus.Errorf("用户不存在")
+		log.LOG.Errorf("用户不存在")
 		return "用户不存在", nil, -1
 	}
 

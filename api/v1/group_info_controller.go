@@ -3,11 +3,11 @@ package v1
 import (
 	"fmt"
 	"gochat/internal/dto/request"
+	"gochat/internal/log"
 	"gochat/internal/service/gorm"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func CreateGroup(c *gin.Context) {
@@ -16,7 +16,7 @@ func CreateGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	logrus.Info(fmt.Sprintf("req: %+v", req))
+	log.LOG.Info(fmt.Sprintf("req: %+v", req))
 	message, code := gorm.GroupInfoService.CreateGroup(req)
 	JsonBack(c, message, code, nil)
 }
@@ -27,7 +27,7 @@ func GetGroupInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	logrus.Info(fmt.Sprintf("req: %+v", req))
+	log.LOG.Info(fmt.Sprintf("req: %+v", req))
 	message, code, groupInfo := gorm.GroupInfoService.GetGroupInfo(req)
 	JsonBack(c, message, code, groupInfo)
 }

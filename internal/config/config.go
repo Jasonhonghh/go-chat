@@ -1,7 +1,8 @@
 package config
 
 import (
-	"github.com/sirupsen/logrus"
+	"gochat/internal/log"
+
 	"github.com/spf13/viper"
 )
 
@@ -11,9 +12,9 @@ func init() {
 	Config = *viper.New()
 	Config.SetConfigName("config")
 	Config.SetConfigType("toml")
-	Config.AddConfigPath("../../configs")
+	Config.AddConfigPath("./configs")
 	err := Config.ReadInConfig()
 	if err != nil {
-		logrus.Fatalf(err.Error()) //读取配置文件出错，直接日志报错
+		log.LOG.Fatalf("%v", err.Error()) //读取配置文件出错，直接日志报错
 	}
 }

@@ -1,0 +1,7 @@
+root = "."
+tmp_dir = "tmp"  # Temporary directory for compiled files
+[build]
+  cmd = "go build -o ./cmd/go_chat_server/go_chat_server ./cmd/go_chat_server/main.go"  # Specify the main Go file
+  bin = "./cmd/go_chat_server/go_chat_server"
+  # Add these lines to ensure proper permissions
+  post_cmd = ["chmod +x ./cmd/go_chat_server/go_chat_server"]

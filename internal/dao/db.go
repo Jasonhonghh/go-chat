@@ -5,7 +5,8 @@ import (
 	"gochat/internal/config"
 	"gochat/internal/model"
 
-	"github.com/sirupsen/logrus"
+	"gochat/internal/log"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -25,10 +26,10 @@ func init() {
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		logrus.Fatalf(err.Error())
+		log.LOG.Fatalf(err.Error())
 	}
 	err = DB.AutoMigrate(&model.ContactApply{}, &model.Message{}, &model.GroupInfo{}, &model.GroupInfo{}, &model.UserInfo{}, &model.Session{}, &model.UserContact{})
 	if err != nil {
-		logrus.Fatalf(err.Error())
+		log.LOG.Fatalf(err.Error())
 	}
 }

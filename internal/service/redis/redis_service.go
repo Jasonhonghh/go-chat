@@ -3,8 +3,9 @@ package redis
 import (
 	"gochat/internal/config"
 
+	"gochat/internal/log"
+
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
 )
 
 var RedisClient *redis.Client
@@ -24,7 +25,7 @@ func init() {
 func SetKey(key string, value string) {
 	err := RedisClient.Set(RedisClient.Context(), key, value, 0).Err()
 	if err != nil {
-		logrus.Errorf("写入到redis失败")
+		log.LOG.Errorf("写入到redis失败")
 	}
 }
 
