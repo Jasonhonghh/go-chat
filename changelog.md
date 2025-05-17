@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [Unreleased] 20250516
+
+### Next Version Plan
+- 下个小版本的规划
 
 ### Added
 
@@ -21,28 +24,35 @@ All notable changes to this project will be documented in this file.
 - 废弃的功能或代码。
 
 ---
+## [0.0.2] 20250517
 
-## [0.0.1] 20250616
-下个版本规划：测试所有API，修复changelog版本功能，新增wss连接功能。
+### Next Version Plan
+- 前端构建wss升级请求，后端新建wss连接功能，测试wss连接。
+
+### Added
+
+- Postman中添加- 测试`/register、/login、/user/getuserinfo、/group/create、/group/getgroupinfo`的测试用例。
+
+### Fixed
+
+- 去除changelog中冗余和错误的部分，之后严格根据实际情况进行更新。
+- 修复GET请求的表单绑定方法和结构体标签。
+- 修改获取用户信息和群组信息的接口名称。
+- 测试`/register、/login、/user/getuserinfo、/group/create、/group/getgroupinfo`基本功能，修复Gorm查询时的错误。
+---
+
+## [0.0.1] 20250516
+### Next Version Plan
+- 测试所有API，修复changelog版本功能，新增wss连接功能。
 
 ### Added
 
 - 添加 `air`实现代码热重载。
 - 添加`start.sh`快速配置环境。更换环境之后，只需要执行`start.sh`即可。
 
-### Changed
-
-- 现有功能的优化或调整。
-
 ### Fixed
 
 - 修复log系统。
-
-### Removed
-
-- 废弃的功能或代码。
-
----
 
 ---
 
@@ -55,27 +65,4 @@ All notable changes to this project will be documented in this file.
 - 添加用户信息获取接口。`/user/info`:获取用户信息。
 - 添加群组创建接口。`/group/create`:创建群组。
 - 添加群组信息获取接口。`/group/info`:获取群组信息。
-- 添加群组成员添加接口。`/group/add`:添加群组成员。
 - 添加联系人添加接口。 `/contacts/apply`:添加联系人。
-- 添加联系人信息获取接口。`/contacts/info`:获取联系人信息。
-- 处理联系人添加请求。`/contacts/pass`:通过联系人添加请求。
-- 处理联系人添加请求。`/contacts/reject`:拒绝联系人添加请求。
-- 添加会话创建接口。`/session/create`:创建会话。
-- 添加获取用户会话列表。`/session/list`:获取会话列表。
-- 添加会话信息获取接口。`/session/info`:获取会话信息。
-- 获取消息列表接口。`/message/getMessage`:获取消息列表。
-- 添加发送消息接口。`/wss`:通过WebSocket发送消息。
-
----
-
-## [1.0.0] - 2024-03-20
-
-### Added
-
-- 项目初始化，实现核心功能 X。
-- 添加用户登录模块。
-
-### Fixed
-
-- 修复文件上传时的内存泄漏问题。
-

@@ -32,39 +32,20 @@
 
 ![alt text](doc/images/flow.png)
 
-## 🚀 快速部署
+## 🚀 部署
 ### 通过源码编译
 部署前请确保安装了以下软件：
 - Go 1.47+
-- MySQL 5.7+
-- Redis 6.0+
-```bash
-# 克隆代码库
-git clone 
-# 进入项目目录
-cd go-wechat
-# 安装依赖
-go mod tidy
-# 编译项目
-go build -o go-chat cmd/go_chat_server/main.go
-# 添加可执行文件目录到PATH
-export PATH=$PATH:$(pwd)/cmd/go_chat_server
-```
-修改配置文件`config.yaml`，设置数据库连接信息和Redis配置后，运行以下命令启动服务：
-```bash
-# 启动服务
-./go-chat
-```
-### Docker部署
-部署前请确保安装了Docker和Docker Compose。最新的Docker镜像可以通过以下命令拉取：
-```bash
-docker pull jasonhonghh/go-chat:latest
-```
-然后在项目根目录执行以下命令启动服务：
-```bash
-docker-compose up -d
-```
+- Docker和Docker Compose
 
+克隆代码库后，进入项目目录，执行以下命令可以执行依赖下载和编译：
+```bash
+sudo bash ./start.sh
+```
+之后会进入Air热重载页面，修改代码保存后，Air会立即重新编译，方便快速开发。
+
+### 通过二进制部署
+暂时还没有发行版本，可以通过源码编译后生成的二进制文件进行部署。只使用二进制部署的话，需要复制`config.yaml`到二进制文件所在目录。
 
 ## 📦 模块设计
 

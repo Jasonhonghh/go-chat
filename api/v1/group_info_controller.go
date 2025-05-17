@@ -23,7 +23,7 @@ func CreateGroup(c *gin.Context) {
 
 func GetGroupInfo(c *gin.Context) {
 	var req request.GetGroupInfoRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.Bind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

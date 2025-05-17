@@ -13,6 +13,7 @@ func init() {
 	Config.SetConfigName("config")
 	Config.SetConfigType("toml")
 	Config.AddConfigPath("./configs")
+	Config.AddConfigPath(".")
 	err := Config.ReadInConfig()
 	if err != nil {
 		log.LOG.Fatalf("%v", err.Error()) //读取配置文件出错，直接日志报错

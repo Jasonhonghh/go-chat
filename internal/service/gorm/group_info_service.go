@@ -51,7 +51,7 @@ func (g *groupInfoService) CreateGroup(request request.CreateGroupRequest) (stri
 
 func (g *groupInfoService) GetGroupInfo(request request.GetGroupInfoRequest) (string, int, response.GetGroupInfoResponse) {
 	var group model.GroupInfo
-	if res := dao.DB.First(&group, request.GroupID); res.Error != nil {
+	if res := dao.DB.First(&group, "uuid=?", request.GroupID); res.Error != nil {
 		return "群聊不存在", -1, response.GetGroupInfoResponse{}
 	}
 	groupInfo := response.GetGroupInfoResponse{

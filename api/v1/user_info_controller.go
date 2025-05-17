@@ -14,7 +14,7 @@ import (
 
 func Register(c *gin.Context) {
 	var registerReq request.RegisterRequest
-	if err := c.BindJSON(&registerReq); err == nil {
+	if err := c.BindJSON(&registerReq); err != nil {
 		log.LOG.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -26,7 +26,7 @@ func Register(c *gin.Context) {
 
 func Login(c *gin.Context) {
 	var loginReq request.LoginRequest
-	if err := c.BindJSON(&loginReq); err == nil {
+	if err := c.BindJSON(&loginReq); err != nil {
 		log.LOG.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -38,7 +38,7 @@ func Login(c *gin.Context) {
 
 func GetUserInfo(c *gin.Context) {
 	var getUserInfoReq request.GetUserInfoRequest
-	if err := c.BindJSON(&getUserInfoReq); err == nil {
+	if err := c.Bind(&getUserInfoReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		log.LOG.Error(err)
 		return

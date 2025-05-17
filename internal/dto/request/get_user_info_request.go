@@ -1,5 +1,5 @@
 package request
 
 type GetUserInfoRequest struct {
-	Uuid string `json:"uuid"`
+	Uuid string `form:"uuid"`
 }

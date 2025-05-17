@@ -1,5 +1,5 @@
 package request
 
 type GetGroupInfoRequest struct {
-	GroupID int `json:"group_id"`
+	GroupID int `form:"group_id"`
 }
