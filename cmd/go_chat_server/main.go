@@ -4,6 +4,7 @@ import (
 	"gochat/internal/config"
 	"gochat/internal/http_server"
 	"gochat/internal/log"
+	"gochat/internal/service/chat"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 
 	GE := http_server.GE
 
+	go chat.ChatServer.Start()
 	if err := GE.Run(host + ":" + port); err != nil {
 		log.LOG.Fatal("Failed to start server: ", err)
 	}

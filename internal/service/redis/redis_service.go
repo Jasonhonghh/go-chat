@@ -2,6 +2,7 @@ package redis
 
 import (
 	"gochat/internal/config"
+	"time"
 
 	"gochat/internal/log"
 
@@ -31,4 +32,22 @@ func SetKey(key string, value string) {
 
 func GetKey(key string) (string, error) {
 	return RedisClient.Get(RedisClient.Context(), key).Result()
+}
+
+func SetKeyEx(key string, value string, expiration int64) {
+	err := RedisClient.Set(RedisClient.Context(), key, value, time.Duration(expiration)).Err()
+	if err != nil {
+		log.LOG.Errorf("写入到redis失败")
+	}
+}
+
+func GetKeyNilIsErr(key string) (string, error) {
+	val, err := RedisClient.Get(RedisClient.Context(), key).Result()
+	if err == redis.Nil {
+		return "", nil
+	} else if err != nil {
+		log.LOG.Errorf("读取redis失败")
+		return "", err
+	}
+	return val, nil
 }

@@ -26,10 +26,10 @@ func init() {
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.LOG.Fatalf(err.Error())
+		log.LOG.Fatal(err)
 	}
 	err = DB.AutoMigrate(&model.ContactApply{}, &model.Message{}, &model.GroupInfo{}, &model.GroupInfo{}, &model.UserInfo{}, &model.Session{}, &model.UserContact{})
 	if err != nil {
-		log.LOG.Fatalf(err.Error())
+		log.LOG.Fatal(err)
 	}
 }

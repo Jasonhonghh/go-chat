@@ -18,5 +18,7 @@ func init() {
 	GE.POST("/group/create", v1.CreateGroup)
 	GE.GET("/group/getgroupinfo", v1.GetGroupInfo)
 	//联系人
-	GE.POST("/contact/apply",v1.ApplyContact)
+	GE.POST("/contact/apply", v1.ApplyContact)
+	//wss登录
+	GE.GET("/wss", v1.WsLogin)
 }

@@ -24,6 +24,18 @@ All notable changes to this project will be documented in this file.
 - 废弃的功能或代码。
 
 ---
+## [0.0.2] 20250519
+
+### Next Version Plan
+- 测试wss的文本消息收发功能；
+- 音视频通话设置；
+
+### Added 
+
+- 添加wss连接建立；文本消息收发和回显功能；
+
+---
+
 ## [0.0.2] 20250517
 
 ### Next Version Plan
