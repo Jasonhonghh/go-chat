@@ -162,6 +162,68 @@ func (s *Server) Start() {
 						}
 					}
 				}
+				if chatMessageReq.Type == message_type_enum.AudioOrVideo {
+					var avData request.AvDataRequest
+					if err := json.Unmarshal([]byte(chatMessageReq.AVdata), &avData); err != nil {
+						log.LOG.Errorf("反序列化错误: %v", err)
+						continue
+					}
+					message := model.Message{
+						Uuid:       fmt.Sprintf("M%s", random.GetNowAndLenRandomString(11)),
+						SessionId:  chatMessageReq.SessionId,
+						Type:       chatMessageReq.Type,
+						Content:    chatMessageReq.Content,
+						Url:        "",
+						SendId:     chatMessageReq.SendId,
+						SendName:   chatMessageReq.SendName,
+						SendAvatar: normalizePath(chatMessageReq.SendAvatar),
+						ReceiveId:  chatMessageReq.ReceiveId,
+						FileType:   "",
+						FileName:   "",
+						FileSize:   "0B",
+						Status:     1,
+						CreatedAt:  time.Now(),
+						AVdata:     chatMessageReq.AVdata,
+					}
+					if avData.MessageID == "PROXY" && avData.Type == "start_call" ||
+						avData.Type == "receive_call" || avData.Type == "reject_call" {
+						message.SendAvatar = normalizePath(message.SendAvatar)
+						if res := dao.DB.Create(&message); res.Error != nil {
+							log.LOG.Errorf("存储消息失败: %v", res.Error)
+						}
+					}
+					if chatMessageReq.ReceiveId[0] == 'U' {
+						messageRsp := response.AVMessageResponse{
+							SendId:     message.SendId,
+							SendName:   message.SendName,
+							SendAvatar: chatMessageReq.SendAvatar,
+							ReceiveId:  message.ReceiveId,
+							Type:       message.Type,
+							Content:    message.Content,
+							Url:        message.Url,
+							FileSize:   message.FileSize,
+							FileName:   message.FileName,
+							FileType:   message.FileType,
+							CreatedAt:  message.CreatedAt.Format("2006-01-02 15:04:05"),
+							AVdata:     message.AVdata,
+						}
+						jsonData, err := json.Marshal(messageRsp)
+						if err != nil {
+							log.LOG.Errorf("序列化消息失败: %v", err)
+							continue
+						}
+						var messageBack = &MessageBack{
+							Message: jsonData,
+							Uuid:    message.Uuid,
+						}
+						s.mutex.Lock()
+						if receiveClient, ok := s.Clients[message.ReceiveId]; ok {
+							receiveClient.SendBack <- messageBack //发送给接收者
+						}
+						//注意这个消息不能回显。
+						s.mutex.Unlock()
+					}
+				}
 			}
 		}
 	}
