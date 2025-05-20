@@ -47,3 +47,15 @@ func GetUserInfo(c *gin.Context) {
 	message, data, code := gorm.UserInfoService.GetUserInfo(getUserInfoReq)
 	JsonBack(c, message, code, data)
 }
+
+func UpdateUserInfo(c *gin.Context) {
+	var updateUserInfoReq request.UpdateUserInfoRequest
+	if err := c.BindJSON(&updateUserInfoReq); err != nil {
+		//BindJso解析错误，会自动返回400错误
+		log.LOG.Error(err)
+		return
+	}
+	log.LOG.Info(fmt.Sprintf("updateUserInfoReq: %+v", updateUserInfoReq))
+	message, code := gorm.UserInfoService.UpdateUserInfo(updateUserInfoReq)
+	JsonBack(c, message, code, nil)
+}

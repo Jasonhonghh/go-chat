@@ -1,11 +1,15 @@
 package gorm
 
 import (
+	"encoding/json"
 	"fmt"
 	"gochat/internal/dao"
 	"gochat/internal/dto/request"
 	"gochat/internal/dto/response"
+	"gochat/internal/log"
 	"gochat/internal/model"
+	myredis "gochat/internal/service/redis"
+	"gochat/pkg/constants"
 	"gochat/pkg/util/random"
 	"time"
 )
@@ -68,4 +72,39 @@ func (g *groupInfoService) GetGroupInfo(request request.GetGroupInfoRequest) (st
 		groupInfo.IsDeleted = true
 	}
 	return "获取群聊信息成功", 0, groupInfo
+}
+
+func (g *groupInfoService) LoadMyGroup(req request.OwnListRequest) (message string, code int, groupsinfo []response.LoadMyGroupResponse) {
+	rspString, err := myredis.GetKeyNilIsErr("contact_mygroup_list_" + req.OwnerId)
+	if err != nil { //no info cached with redis
+		var grouplist []model.GroupInfo
+		if res := dao.DB.Order("created_at DESC").Where("owner_id = ?", req.OwnerId).Find(&grouplist); res.Error != nil {
+			log.LOG.Error(res.Error)
+			return "DB error", -1, nil
+		}
+		groupListResponse := []response.LoadMyGroupResponse{}
+		log.LOG.Infof("found %d groups", len(grouplist))
+		for _, group := range grouplist {
+			groupListResponse = append(groupListResponse,
+				response.LoadMyGroupResponse{
+					GroupId:   group.Uuid,
+					GroupName: group.Name,
+					Avatar:    group.Avatar,
+				},
+			)
+		}
+		log.LOG.Info(groupListResponse)
+		rspString, err := json.Marshal(groupListResponse)
+		if err != nil {
+			log.LOG.Error(err)
+		}
+		myredis.SetKeyEx("contact_mygroup_list_"+req.OwnerId, string(rspString), int64(time.Minute*constants.REDIS_TIMEOUT))
+		return "success", 0, groupListResponse
+	}
+	var groupListRsp []response.LoadMyGroupResponse
+	if err := json.Unmarshal([]byte(rspString), &groupListRsp); err != nil {
+		log.LOG.Info(string(rspString))
+		log.LOG.Error(err)
+	}
+	return "success", 0, groupListRsp
 }

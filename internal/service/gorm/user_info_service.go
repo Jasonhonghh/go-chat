@@ -142,3 +142,38 @@ func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (strin
 	getUserInfoRsp.CreatedAt = fmt.Sprintf("%d.%d.%d", year, month, date)
 	return "获取用户信息成功", getUserInfoRsp, 0
 }
+
+func (u *userInfoService) UpdateUserInfo(request request.UpdateUserInfoRequest) (string, int) {
+	//查看用户是否存在
+	var user model.UserInfo
+	res := dao.DB.First(&user, "uuid =?", request.Uuid)
+	if res.Error != nil || res.RowsAffected == 0 {
+		log.LOG.Errorf("用户不存在")
+		return "用户不存在", -1
+	}
+
+	//更新用户信息
+	if request.Nickname != "" {
+		user.Nickname = request.Nickname
+	}
+	if request.Avatar != "" {
+		user.Avatar = request.Avatar
+	}
+	if request.Email != "" {
+		user.Email = request.Email
+	}
+	if request.Birthday != "" {
+		user.Birthday = request.Birthday
+	}
+	if request.Signature != "" {
+		user.Signature = request.Signature
+	}
+
+	res = dao.DB.Save(&user)
+	if res.Error != nil {
+		log.LOG.Errorf("更新用户信息失败")
+		return "更新用户信息失败", -1
+	}
+
+	return "更新用户信息成功", 0
+}

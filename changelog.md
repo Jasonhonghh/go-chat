@@ -24,7 +24,30 @@ All notable changes to this project will be documented in this file.
 - 废弃的功能或代码。
 
 ---
-## [0.0.2] 20250519
+## [0.0.4] 20250520
+
+### Next Version Plan
+- 下个小版本的规划
+
+### Added
+
+- 添加用户信息更新接口。`updateuserinfo`。
+- add user's group infomation loading api. `loadmygroup`. test with a problem that success with no info.
+
+### Changed
+
+- 现有功能的优化或调整。
+
+### Fixed
+
+- 修复的 Bug。
+
+### Removed
+
+- 废弃的功能或代码。
+
+---
+## [0.0.3] 20250519
 
 ### Next Version Plan
 - 测试wss的文本消息收发功能；
@@ -33,6 +56,7 @@ All notable changes to this project will be documented in this file.
 ### Added 
 
 - 添加wss连接建立；文本消息收发和回显功能；
+- 添加avData消息支持，供音视频通话设置；
 
 ---
 
