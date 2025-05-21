@@ -24,10 +24,34 @@ All notable changes to this project will be documented in this file.
 - 废弃的功能或代码。
 
 ---
-## [0.0.4] 20250520
+
+
+## [0.0.5] 20250521
 
 ### Next Version Plan
 - 下个小版本的规划
+
+### Added
+
+- 添加所有接口，api/v1中做空实现。
+
+### Changed
+
+- 现有功能的优化或调整。
+
+### Fixed
+
+- 修复的 Bug。
+
+### Removed
+
+- 废弃的功能或代码。
+
+---
+## [0.0.4] 20250520
+
+### Next Version Plan
+- 添加所有群组功能结构。
 
 ### Added
 

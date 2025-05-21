@@ -59,3 +59,13 @@ func UpdateUserInfo(c *gin.Context) {
 	message, code := gorm.UserInfoService.UpdateUserInfo(updateUserInfoReq)
 	JsonBack(c, message, code, nil)
 }
+
+func SendSmsCode(c *gin.Context) {
+
+}
+func SmsLogin(c *gin.Context) {
+
+}
+func WsLogout(c *gin.Context) {
+
+}

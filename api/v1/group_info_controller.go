@@ -44,3 +44,27 @@ func LoadMyGroup(c *gin.Context) {
 	message, code, groupsinfo := gorm.GroupInfoService.LoadMyGroup(req)
 	JsonBack(c, message, code, groupsinfo)
 }
+
+func CheckGroupAddMode(c *gin.Context) {
+
+}
+
+func EnterGroupDirectly(c *gin.Context) {
+
+}
+
+func LeaveGroup(c *gin.Context) {
+
+}
+
+func DismissGroup(c *gin.Context) {
+
+}
+
+func GetGroupMemberList(c *gin.Context) {
+
+}
+
+func RemoveGroupMembers(c *gin.Context) {
+
+}
