@@ -30,7 +30,7 @@
 
 ## 🛠️ 技术架构
 
-![alt text](doc/images/flow.png)
+![202505241331227](https://3ec93ca.webp.li/202505241331227.png)
 
 ## 🚀 部署
 ### 通过源码编译

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"gochat/internal/dao"
 	"gochat/internal/dto/request"
-	"gochat/internal/dto/response"
+	"gochat/internal/dto/respond"
 	"gochat/internal/log"
 	"gochat/internal/model"
 	myredis "gochat/internal/service/redis"
@@ -110,7 +110,7 @@ func (s *Server) Start() {
 
 					// 发送消息
 					if message.ReceiveId[0] == 'U' {
-						messageRsp := response.GetMessageListResponse{
+						messageRsp := respond.GetMessageListRespond{
 							SendId:     message.SendId,
 							SendName:   message.SendName,
 							SendAvatar: chatMessageReq.SendAvatar,
@@ -146,7 +146,7 @@ func (s *Server) Start() {
 						var rspString string
 						rspString, err = myredis.GetKeyNilIsErr("message_list_" + message.SendId + "_" + message.ReceiveId)
 						if err == nil {
-							var rsp []response.GetMessageListResponse
+							var rsp []respond.GetMessageListRespond
 							if err := json.Unmarshal([]byte(rspString), &rsp); err != nil {
 								log.LOG.Errorf("反序列化错误: %v", err)
 							}
@@ -193,7 +193,7 @@ func (s *Server) Start() {
 						}
 					}
 					if chatMessageReq.ReceiveId[0] == 'U' {
-						messageRsp := response.AVMessageResponse{
+						messageRsp := respond.AVMessageRespond{
 							SendId:     message.SendId,
 							SendName:   message.SendName,
 							SendAvatar: chatMessageReq.SendAvatar,

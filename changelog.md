@@ -9,6 +9,28 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- 
+
+### Changed
+
+- 现有功能的优化或调整。
+
+### Fixed
+
+- 修复的 Bug。
+
+### Removed
+
+- 废弃的功能或代码。
+
+---
+## [0.0.6] 20250523
+
+### Next Version Plan
+- 下个小版本的规划
+
+### Added
+
 - 新增功能。
 
 ### Changed
@@ -24,7 +46,6 @@ All notable changes to this project will be documented in this file.
 - 废弃的功能或代码。
 
 ---
-
 
 ## [0.0.5] 20250521
 

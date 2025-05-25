@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gochat/internal/dao"
 	"gochat/internal/dto/request"
-	"gochat/internal/dto/response"
+	"gochat/internal/dto/respond"
 	"gochat/internal/log"
 	"gochat/internal/model"
 	"gochat/internal/service/redis"
@@ -35,7 +35,7 @@ func (u *userInfoService) checkUserIsAdmin(telephone string) int8 {
 }
 
 // 注册功能
-func (u *userInfoService) Register(request request.RegisterRequest) (string, *response.RegisterResponse, int) {
+func (u *userInfoService) Register(request request.RegisterRequest) (string, *respond.RegisterRespond, int) {
 	//查redis，校验验证码
 	key := "auth_code_" + request.Telephone
 	code, err := redis.GetKey(key)
@@ -68,7 +68,7 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 	}
 
 	//返回注册信息
-	registerRsp := &response.RegisterResponse{
+	registerRsp := &respond.RegisterRespond{
 		Uuid:      newUser.Uuid,
 		Nickname:  newUser.Nickname,
 		Telephone: newUser.Telephone,
@@ -85,7 +85,7 @@ func (u *userInfoService) Register(request request.RegisterRequest) (string, *re
 	return "注册成功", registerRsp, 0
 }
 
-func (u *userInfoService) Login(request request.LoginRequest) (string, *response.LoginResponse, int) {
+func (u *userInfoService) Login(request request.LoginRequest) (string, *respond.LoginRespond, int) {
 	//查看用户是否存在
 	var user model.UserInfo
 	res := dao.DB.First(&user, "telephone =?", request.Telephone)
@@ -99,7 +99,7 @@ func (u *userInfoService) Login(request request.LoginRequest) (string, *response
 		return "密码不正确", nil, -1
 	}
 	//返回登录信息
-	loginRsp := &response.LoginResponse{
+	loginRsp := &respond.LoginRespond{
 		Uuid:      user.Uuid,
 		Nickname:  user.Nickname,
 		Telephone: user.Telephone,
@@ -116,7 +116,7 @@ func (u *userInfoService) Login(request request.LoginRequest) (string, *response
 	return "登录成功", loginRsp, 0
 }
 
-func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (string, *response.GetUserInfoResponse, int) {
+func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (string, *respond.GetUserInfoRespond, int) {
 	//查看用户是否存在
 	var user model.UserInfo
 	res := dao.DB.First(&user, "uuid =?", request.Uuid)
@@ -126,7 +126,7 @@ func (u *userInfoService) GetUserInfo(request request.GetUserInfoRequest) (strin
 	}
 
 	//返回用户信息
-	getUserInfoRsp := &response.GetUserInfoResponse{
+	getUserInfoRsp := &respond.GetUserInfoRespond{
 		Uuid:      user.Uuid,
 		Nickname:  user.Nickname,
 		Telephone: user.Telephone,

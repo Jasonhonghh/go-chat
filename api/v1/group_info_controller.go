@@ -46,25 +46,62 @@ func LoadMyGroup(c *gin.Context) {
 }
 
 func CheckGroupAddMode(c *gin.Context) {
-
+	var req request.CheckGroupAddModeRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code, addModeRsp := gorm.GroupInfoService.CheckGroupAddMode(req)
+	JsonBack(c, message, code, addModeRsp)
 }
 
 func EnterGroupDirectly(c *gin.Context) {
-
+	var req request.EnterGroupDirectlyRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code := gorm.GroupInfoService.EnterGroupDirectly(req)
+	JsonBack(c, message, code, nil)
 }
 
 func LeaveGroup(c *gin.Context) {
+	var req request.LeaveGroupRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code := gorm.GroupInfoService.LeaveGroup(req)
+	JsonBack(c, message, code, nil)
 
 }
 
 func DismissGroup(c *gin.Context) {
-
+	var req request.DismissGroupRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code := gorm.GroupInfoService.DismissGroup(req)
+	JsonBack(c, message, code, nil)
 }
 
 func GetGroupMemberList(c *gin.Context) {
-
+	var req request.GetGroupMemberListRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code, getGroupMemberListRsp := gorm.GroupInfoService.GetGroupMemberList(req)
+	JsonBack(c, message, code, getGroupMemberListRsp)
 }
 
 func RemoveGroupMembers(c *gin.Context) {
-
+	var req request.RemoveGroupMembersRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.LOG.Error(err)
+		return
+	}
+	message, code := gorm.GroupInfoService.RemoveGroupMembers(req)
+	JsonBack(c, message, code, nil)
 }
