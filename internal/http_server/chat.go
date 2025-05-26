@@ -55,11 +55,11 @@ func addGroupApi() {
 }
 func addContactApi() {
 	GE.POST("/contact/applyContact", v1.ApplyContact)
-	GE.POST("/contact/getUserList", v1.GetUserList)
+	GE.POST("/contact/getUserList", v1.GetContactList)
 	GE.POST("/contact/loadMyJoinedGroup", v1.LoadMyJoinedGroup)
 	GE.POST("/contact/getContactInfo", v1.GetContactInfo)
 	GE.POST("contact/deleteContact", v1.DeleteContact)
-	GE.POST("/contact/getNewContactList", v1.GetNewContactList)
+	GE.POST("/contact/getNewContactList", v1.GetNewContactApplyList)
 	GE.POST("/contact/passContactApply", v1.PassContactApply)
 	GE.POST("/contact/rejectContactApply", v1.RejectContactApply)
 	GE.POST("/contact/blackContact", v1.BlackContact)

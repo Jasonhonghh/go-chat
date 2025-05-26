@@ -20,7 +20,7 @@ func ApplyContact(c *gin.Context) {
 	message, code := gorm.UserContactService.ApplyContact(req)
 	JsonBack(c, message, code, nil)
 }
-func GetUserList(c *gin.Context) {
+func GetContactList(c *gin.Context) {
 	var req request.OwnListRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
@@ -28,127 +28,127 @@ func GetUserList(c *gin.Context) {
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService.GetUserList(req)
-	JsonBack(c, message, code, userList)
+	message, code, contactList := gorm.UserContactService.GetContactList(req)
+	JsonBack(c, message, code, contactList)
 }
 func LoadMyJoinedGroup(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.OwnListRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService.(req)
-	JsonBack(c, message, code, userList)
+	message, code, groupList := gorm.UserContactService.LoadMyJoinedGroup(req)
+	JsonBack(c, message, code, groupList)
 }
 func GetContactInfo(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.GetContactInfoRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code, contactInfo := gorm.UserContactService.GetContactInfo(req)
+	JsonBack(c, message, code, contactInfo)
 }
 func DeleteContact(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.DeleteContactRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.DeleteContact(req)
+	JsonBack(c, message, code, nil)
 }
-func GetNewContactList(c *gin.Context) {
-	var req request.ApplyContactRequest
+func GetNewContactApplyList(c *gin.Context) {
+	var req request.OwnListRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code, contactApplyList := gorm.UserContactService.GetNewContactApplyList(req)
+	JsonBack(c, message, code, contactApplyList)
 }
 func PassContactApply(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.PassContactApplyRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.PassContactApply(req)
+	JsonBack(c, message, code, nil)
 }
 func RejectContactApply(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.PassContactApplyRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.RejectContactApply(req)
+	JsonBack(c, message, code, nil)
 }
 func BlackContact(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.BlackContactRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.BlackContact(req)
+	JsonBack(c, message, code, nil)
 }
 func CancelBlackContact(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.BlackContactRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.CancelBlackContact(req)
+	JsonBack(c, message, code, nil)
 }
 func GetAddGroupList(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.AddGroupListRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.GetAddGroupList(req)
+	JsonBack(c, message, code, nil)
 }
 func BlackApply(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.BlackApplyRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.BlackApply(req)
+	JsonBack(c, message, code, nil)
 }
 func CancelBlackApply(c *gin.Context) {
-	var req request.ApplyContactRequest
+	var req request.BlackApplyRequest
 	if err := c.BindJSON(&req); err != nil {
 		//BindJSON method will automaticaly return 400 error if bindinf failed.
 		log.LOG.Error(err)
 		return
 	}
 	log.LOG.Infof("res:%v", req)
-	message, code, userList := gorm.UserContactService(req)
-	JsonBack(c, message, code, userList)
+	message, code := gorm.UserContactService.CancelBlackApply(req)
+	JsonBack(c, message, code, nil)
 }

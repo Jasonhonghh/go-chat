@@ -1,5 +1,5 @@
 
-![logo](doc/images/logo.png)
+![202505252138934](https://3ec93ca.webp.li/202505252138934.jpg)
 # Go-WeChat 🚀
 
 [![Go Version](https://img.shields.io/badge/go-1.47+-blue.svg)](https://golang.org/dl/)
