@@ -1,6 +1,6 @@
 
 ![202505252138934](https://3ec93ca.webp.li/202505252138934.jpg)
-# Go-WeChat 🚀
+# Go-Chat 🚀
 
 [![Go Version](https://img.shields.io/badge/go-1.47+-blue.svg)](https://golang.org/dl/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
