@@ -2,6 +2,7 @@ package http_server
 
 import (
 	v1 "gochat/api/v1"
+	"gochat/internal/config"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,12 @@ func init() {
 		}
 		c.Next()
 	})
+
+	conf := config.Config
+	avatarPath := conf.GetString("staticSrcConfig.staticAvatarPath")
+	filePath := conf.GetString("staticSrcConfig.staticFilePath")
+	GE.Static("/static/avatars", avatarPath)
+	GE.Static("/static/files", filePath)
 
 	// Register routes
 	addRegisterLoginApi()
